@@ -1,4 +1,4 @@
-package xmasExercise;
+package xmasExercise.InvoiceReceipt;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,20 +7,15 @@ import java.util.Scanner;
 
 public class Shop {
     public static final double VAT = 0.175;
-    private String shopName;
-    private String shopAddress;
-    private String shopBranch;
+    private final String shopName;
+    private final String shopAddress;
+    private final String shopBranch;
 
-    private String shopPhoneNumber;
+    private final String shopPhoneNumber;
 
     private String cashierName;
 
     private String customerName;
-
-
-
-    private int numberOfGoods;
-    private double priceOfGoods;
 
     private double totalCost;
 
@@ -29,8 +24,6 @@ public class Shop {
     private  double discountedAmount;
 
     private  double VATPrice;
-
-    private static double discount = 0.08;
 
     private double billAmount;
 
@@ -59,70 +52,27 @@ public class Shop {
         this.shopPhoneNumber=shopPhoneNumber;
     }
 
-    public void setName() {
-        this.shopName = shopName;
-    }
-
-    public String getName() {return shopName;}
-
-    public void setAddress() {
-        this.shopAddress = shopAddress;
-    }
-
-    public String getAddress() {
-        return shopAddress;
-    }
-
-    public void setBranch() {this.shopBranch = shopBranch;}
-
-    public String getBranch() {
-        return shopBranch;
-    }
-
-    public void setShopPhoneNumber(){this.shopPhoneNumber=shopPhoneNumber;}
-
-    public String getShopPhoneNumber(){return shopPhoneNumber;}
-
     public void setCashierName(String cashierName){
         this.cashierName = cashierName;}
 
-    public String getCashierName(){return cashierName;}
-
-    public void setCustomerName(String customerName){
-        this.customerName = customerName;}
-
-    public String getCustomerName(){return customerName;}
-
-    public void setSubTotal(){subTotal = 0;
-        this.subTotal=subTotal;}
+    public void setCustomerName(String customerName){this.customerName = customerName;}
 
     public double getSubTotal(){return subTotal;}
 
-    public void setDiscount(){
-        this.discount = discount;
-    }
-
     public double getDiscount(){
-        return discount;
+        return 0.08;
     }
-
-    public void setDiscountedAmount(){
-        discountedAmount=0;
-        this.discountedAmount =discountedAmount;}
 
     public double getDiscountedAmount(){return discountedAmount;}
 
-    public void setVATPrice(){this.VATPrice=VATPrice;}
 
     public double getVATPrice(){return VATPrice;}
 
-    public void setBillAmount(){
-        this.billAmount = billAmount;}
 
     public double getBillAmount(){return billAmount;}
 
     public void setPayment(double payment){
-        this.payment= payment;}
+        Shop.payment = payment;}
 
     public  double getPayment(){return payment;}
 
@@ -138,11 +88,11 @@ public class Shop {
 
 
             System.out.print("How many of it: ");
-            numberOfGoods = purchaseCollector.nextInt();
+            int numberOfGoods = purchaseCollector.nextInt();
             quantity.add(counter, numberOfGoods);
 
             System.out.print("price:");
-            priceOfGoods = purchaseCollector.nextDouble();
+            double priceOfGoods = purchaseCollector.nextDouble();
             price.add(counter, priceOfGoods);
 
             calculateTotalCostOfGoods(priceOfGoods, numberOfGoods);
@@ -155,18 +105,28 @@ public class Shop {
         }
         while (morePurchase != 0);
 
-
-    }
+        movingContentOfArrayListToArray(items,quantity,price,total);
+        calculatesSubTotal();
+        calculateDiscountPrice(getDiscount(),getSubTotal() );
+        calculateVATPrice(Shop.VAT,getSubTotal());
+        calculateBillTotal(getSubTotal(),getDiscountedAmount(),getVATPrice());
+        System.out.print("Customer Name: ");
+        String customerName = purchaseCollector.next();
+        setCustomerName(customerName);
+        System.out.print("Cashier: ");
+        String cashierName = purchaseCollector.next();
+        setCashierName(cashierName);
+        printPurchaseSummary();
+        }
 
     public double calculateTotalCostOfGoods(Double priceOfGoods, int numberOfGoods) {
         totalCost = priceOfGoods * numberOfGoods;
         return totalCost;
-    }
+        }
 
-    public void movingContentOfArrayListToArray(ArrayList<String>items,ArrayList<Integer>quantity,ArrayList<Double>price,ArrayList<Double>total) {
+    public void movingContentOfArrayListToArray(ArrayList<String>items, ArrayList<Integer>quantity, ArrayList<Double>price, ArrayList<Double>total) {
 
         purchaseSummary = new String[counter][4];
-        this.purchaseSummary = purchaseSummary;
 
         for (int i = 0; i < items.size(); i++) {
             purchaseSummary[i][0] = items.get(i);
@@ -187,10 +147,10 @@ public class Shop {
 
     }
 
-        public double calculatesSubTotal() {
-        for (int t = 0; t < total.size(); t++) {
-            subTotal = subTotal + total.get(t);}
-            return subTotal;
+        public void calculatesSubTotal() {
+            for (Double aDouble : total) {
+                subTotal = subTotal + aDouble;
+            }
         }
 
 
@@ -200,7 +160,8 @@ public class Shop {
 
         public double calculateVATPrice(double VAT, Double subTotal){
         VATPrice= VAT*subTotal;
-        return VATPrice;}
+        return VATPrice;
+        }
 
         public double calculateBillTotal(double subTotal,double discountedAmount, double VATPrice){
              billAmount = (subTotal- discountedAmount+VATPrice);
@@ -208,8 +169,7 @@ public class Shop {
         }
 
         public double calculateBalance(double billAmount){
-            double balance = payment - billAmount;
-            return balance;
+            return payment - billAmount;
         }
 
         public void heading(){
@@ -219,7 +179,7 @@ public class Shop {
             System.out.println(shopName);
             System.out.println(shopBranch);
             System.out.println("LOCATION: " + shopAddress);
-            System.out.println("TEL: "+ shopName);
+            System.out.println("TEL: "+ shopPhoneNumber);
             System.out.println("DATE: "+ famiba);
             System.out.println("Cashier: "+ cashierName);
             System.out.println("Customer Name:"+ customerName);
@@ -227,54 +187,47 @@ public class Shop {
         }
 
     public void printPurchaseSummary() {
+        calculateBalance(getBillAmount());
+        heading();
         summaryHeading = new String[]{"ITEMS", "QUANTITY", "PRICE", "TOTAL"};
-        this.summaryHeading = summaryHeading;
             System.out.println("==============================================================================================");
             System.out.printf("%20s %20s  %20s %20s%n", summaryHeading[0],summaryHeading[1],summaryHeading[2],summaryHeading[3]);System.out.println();
             System.out.println("==============================================================================================");
         for (int s = 0; s < items.size(); s++) {
-            System.out.printf("%20s %20s  %20s %20s%n", purchaseSummary[s][0], purchaseSummary[s][1], purchaseSummary[s][2], purchaseSummary[s][3]);}
+            System.out.printf("%20s %20s  %20s %20s%n", purchaseSummary[s][0], purchaseSummary[s][1], purchaseSummary[s][2], purchaseSummary[s][3]);
+        }
             System.out.println("----------------------------------------------------------------------------------------------");
-            String N = "SubTotal";
-            System.out.printf("%50s: %.2f%n",N,subTotal);
-            String M = "DISCOUNT";
-            System.out.printf("%50s: %.2f%n",M,discountedAmount);
-            String O = "VAT @ 17.50%";
-            System.out.printf("%50s: %.2f%n",O,VATPrice);
+
+            System.out.printf("%50s: %.2f%n","SubTotal",subTotal);
+            System.out.printf("%50s: %.2f%n","DISCOUNT",discountedAmount);
+            System.out.printf("%50s: %.2f%n","VAT @ 17.50%",VATPrice);
             System.out.println("=============================================================================================");
-            String P = "VAT @ BILLTOTAL";
-            System.out.printf("%50s: %.2f%n",P,billAmount);
+            System.out.printf("%50s: %.2f%n","VAT @ BILLTOTAL",billAmount);
             System.out.println("=============================================================================================");
-            String Q = "THIS IS NOT A RECEIPT KINDLY PAY: ";
-            System.out.printf("%60s: %.2f%n",Q, billAmount);
+            System.out.printf("%60s: %.2f%n","THIS IS NOT A RECEIPT KINDLY PAY: ", billAmount);
             System.out.println("=============================================================================================");
     }
 
     public void printReceipt() {
+
         System.out.println();
         System.out.println();
-        System.out.println("=========================================================================================");
+        heading();
+        System.out.println("============================================================================================");
         System.out.printf("%20s %20s  %20s %20s%n", summaryHeading[0],summaryHeading[1],summaryHeading[2],summaryHeading[3]);System.out.println();
-        System.out.println("================================================================================================");
+        System.out.println("============================================================================================");
         for (int s = 0; s < items.size(); s++) {
             System.out.printf("%20s %20s  %20s %20s%n", purchaseSummary[s][0], purchaseSummary[s][1], purchaseSummary[s][2], purchaseSummary[s][3]);}
         System.out.println("--------------------------------------------------------------------------------------------");
-        String N = "SubTotal";
-        System.out.printf("%50s: %.2f%n",N,subTotal);
-        String M = "DISCOUNT";
-        System.out.printf("%50s: %.2f%n",M,discountedAmount);
-        String O = "VAT @ 17.50%";
-        System.out.printf("%50s: %.2f%n",O,VATPrice);
+        System.out.printf("%50s: %.2f%n","SubTotal",subTotal);
+        System.out.printf("%50s: %.2f%n","DISCOUNT",discountedAmount);
+        System.out.printf("%50s: %.2f%n","VAT @ 17.50%",VATPrice);
         System.out.println("============================================================================================");
-        String P = "VAT @ BILLTOTAL";
-        System.out.printf("%50s: %.2f%n",P,billAmount);
-        String Q = "AMOUNT PAID: ";
-        System.out.printf("%50s: %.2f%n",Q,getPayment());
-        String R= "BALANCE: ";
-        System.out.printf("%50s: %.2f%n",R,calculateBalance(billAmount));
+        System.out.printf("%50s: %.2f%n","VAT @ BILLTOTAL",billAmount);
+        System.out.printf("%50s: %.2f%n","AMOUNT PAID: ",getPayment());
+        System.out.printf("%50s: %.2f%n","BALANCE: ",calculateBalance(billAmount));
         System.out.println("============================================================================================");
-        String S="THANK YOU FOR YOUR PATRONAGE";
-        System.out.printf("%60s%n",S);
+        System.out.printf("%60s%n","THANK YOU FOR YOUR PATRONAGE");
         System.out.println("============================================================================================");
     }
 

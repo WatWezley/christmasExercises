@@ -2,6 +2,7 @@ package xmasExercise;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import xmasExercise.cardValidation.CardValidation;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,106 +22,50 @@ public class CardValidationTest {
     }
 
     @Test
-    public void testThatCardNumberIsCorrect() {
-        String cardNumber = "4239816349234";
-        String number;
-        if ((cardNumber.length() == 16) || ((cardNumber.length() == 13))) {
-            number = "complete";
-        } else {
-            number = "incomplete";
-        }
-        assertEquals("complete", number);
+    public void testThatTypeOfCardCanBeDetermined(){
+        cardValidator.setCardNumber("5990493845728937");
+        String result = cardValidator.getTypeOfCard();
+        assertEquals("Master Card", result);
+    }
+
+
+
+    @Test
+    public void testThatCardLengthIsValid(){
+        cardValidator.setCardNumber("5990493845728937");
+        boolean result = cardValidator.isCardLengthValid();
+        assertEquals(true, result);
     }
 
     @Test
-    public void testThatCardNumberIsIncorrect() {
-        String cardNumber = "42398163492346";
-        String number;
-            if ((cardNumber.length() == 16) || (cardNumber.length() == 13)) {
-                number = "complete";
-            } else {
-                number = "incomplete";
-            }
-            assertEquals("incomplete", number);
-        }
-
-
-
-    @Test
-    public void testThatDetermineMasterCardType() {
-        String cardNumber = "5764892309863672";
-        String cardType;
-        System.out.println(cardNumber.charAt(0));
-        System.out.println(cardNumber.charAt(1));
-        String singleNumber = String.valueOf(cardNumber.charAt(0));
-        int input = Integer.parseInt(singleNumber);
-        if(input == 5){
-            cardType = "Master Card";}
-            else{
-                cardType = "Invalid Card";}
-           assertEquals("Master Card", cardType);
-        }
-
-    @Test
-    public void testThatDetermineVisaCardType() {
-        String cardNumber = "4764892309863672";
-        String cardType;
-        String singleNumber = String.valueOf(cardNumber.charAt(0));
-        int input = Integer.parseInt(singleNumber);
-        if(input == 4){
-            cardType = "Visa Card";}
-        else{
-            cardType = "Invalid Card";}
-        assertEquals("Visa Card", cardType);
+    public void testThatCardLengthIsNotValid(){
+        cardValidator.setCardNumber("59904728937");
+        boolean result = cardValidator.isCardLengthValid();
+        assertEquals(false, result);
     }
 
-    @Test
-    public void testThatDetermineDiscoveryCardType() {
-        String cardNumber = "6764892309863672";
-        String cardType;
-        String singleNumber = String.valueOf(cardNumber.charAt(0));
-        int input = Integer.parseInt(singleNumber);
-        if(input == 6){
-            cardType = "Discovery Card";}
-        else{
-            cardType = "Invalid Card";}
-        assertEquals("Discovery Card", cardType);
-    }
 
-    @Test
-    public void testAddingTheCard(){
-        int sum = cardValidator.addingCardNumbers("1234567898765");
+         @Test
+         public void testAddingTheCard(){
+        cardValidator.setCardNumber("1234567898765");
+        int sum = cardValidator.addingCardNumbers();
         assertEquals(29,sum);
-    }
+        }
 
-    @Test
-    public  void testAddingReverseNumber(){
-        int sumReverse = cardValidator.addingReverseOddIndex("1234567898765");
+        @Test
+        public  void testAddingReverseNumber(){
+        cardValidator.setCardNumber("1234567898765") ;
+        int sumReverse = cardValidator.addingReverseOddIndex();
         assertEquals(37,sumReverse);
     }
 
-    @Test
-    public void testInvalidCard(){
-        int sumEvenPosition = cardValidator.addingCardNumbers("5234567898765");
-        int sumOddPosition = cardValidator.addingReverseOddIndex("5234567898765");
-        int sum =sumOddPosition+sumEvenPosition;
-        String validity;
-        if(sum%10==0){
-            validity = "VALID";}
-        else{validity = "INVALID";}
-        assertEquals("INVALID",validity);
-        }
 
     @Test
     public void testValidCard(){
-        int sumEvenPosition = cardValidator.addingCardNumbers("5399839232225143");
-        int sumOddPosition = cardValidator.addingReverseOddIndex("5399839232225143");
-        int sum =sumOddPosition+sumEvenPosition;
-        String validity;
-        if(sum%10==0){
-            validity = "VALID";}
-        else{validity = "INVALID";}
-        assertEquals("VALID",validity);
+        cardValidator.setCardNumber("5399831619690403");
+        boolean isCardNumberValid = cardValidator.isCardValid();
+        assertEquals(true, isCardNumberValid);
+
     }
     }
 

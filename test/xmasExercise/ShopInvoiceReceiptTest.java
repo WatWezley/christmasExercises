@@ -2,6 +2,7 @@ package xmasExercise;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import xmasExercise.InvoiceReceipt.Shop;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,8 +10,6 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ShopInvoiceReceiptTest {
-
-    public Shop famibaShop;
 
     int counter = 0;
 
@@ -24,10 +23,12 @@ public class ShopInvoiceReceiptTest {
 
     String[][] purchaseSummary = new String[2][4];
 
+    private  Shop famibaShop;
+
 
     @BeforeEach
     public void setUp() {
-        Shop famibashop = new Shop("famiba", "no 1 constitution crescent Aba", "Main","08036457939");
+        famibaShop = new Shop("famiba", "no 1 constitution crescent Aba", "Main","08036457939");
     }
 
 
